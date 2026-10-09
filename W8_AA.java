@@ -1,43 +1,46 @@
 
 import java.util.Scanner;
 
-abstract class Vehicle {
-    int hours;
+abstract class Room {
+    int units;
 
-    Vehicle(int hours) {
-        this.hours = hours;
+    Room(int units) {
+        this.units = units;
     }
 
     abstract double calculate();
 }
 
-class Bike extends Vehicle {
-    Bike(int hours) {
-        super(hours);
+class Single extends Room {
+    Single(int units) {
+        super(units);
     }
 
     double calculate() {
-        return hours * 10;
+        return units * 8;
     }
 }
 
-class Car extends Vehicle {
-    Car(int hours) {
-        super(hours);
+class Shared extends Room {
+    int occupants;
+
+    Shared(int units, int occupants) {
+        super(units);
+        this.occupants = occupants;
     }
 
     double calculate() {
-        return 30 + (hours - 1) * 20;
+        return (units * 6.0) / occupants;
     }
 }
 
-class Truck extends Vehicle {
-    Truck(int hours) {
-        super(hours);
+class AC extends Room {
+    AC(int units) {
+        super(units);
     }
 
     double calculate() {
-        return Math.max(hours * 50, 100);
+        return units * 10 + 200;
     }
 }
 
@@ -49,26 +52,27 @@ public class W8_AA {
 
         for (int i = 0; i < n; i++) {
             String type = sc.next().toUpperCase();
-            int hours = sc.nextInt();
-            Vehicle v;
+            int units = sc.nextInt();
+            Room r;
 
             switch (type) {
-                case "BIKE":
-                    v = new Bike(hours);
+                case "SINGLE":
+                    r = new Single(units);
                     break;
-                case "CAR":
-                    v = new Car(hours);
+                case "SHARED":
+                    int occupants = sc.nextInt();
+                    r = new Shared(units, occupants);
                     break;
-                case "TRUCK":
-                    v = new Truck(hours);
+                case "AC":
+                    r = new AC(units);
                     break;
                 default:
                     continue;
             }
 
-            double charge = v.calculate();
-            System.out.printf("%s: %.2f%n", type, charge);
-            total += charge;
+            double bill = r.calculate();
+            System.out.printf("%s: %.2f%n", type, bill);
+            total += bill;
         }
 
         System.out.printf("Total: %.2f%n", total);
