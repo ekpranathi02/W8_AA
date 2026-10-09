@@ -1,45 +1,50 @@
 
 import java.util.Scanner;
+import java.time.LocalDate;
 
-abstract class Employee {
+abstract class Plan {
     String name;
-    double salary;
+    LocalDate startDate;
 
-    Employee(String name, double salary) {
+    Plan(String name, LocalDate startDate) {
         this.name = name;
-        this.salary = salary;
+        this.startDate = startDate;
     }
 
-    abstract double calculate();
-}
+    abstract int validity();
 
-class FullTime extends Employee {
-    FullTime(String name, double salary) {
-        super(name, salary);
-    }
-
-    double calculate() {
-        return salary * 0.10;
+    LocalDate renewalDate() {
+        return startDate.plusDays(validity());
     }
 }
 
-class PartTime extends Employee {
-    PartTime(String name, double salary) {
-        super(name, salary);
+class Basic extends Plan {
+    Basic(String name, LocalDate date) {
+        super(name, date);
     }
 
-    double calculate() {
-        return salary * 0.05;
+    int validity() {
+        return 30;
     }
 }
 
-class Intern extends Employee {
-    Intern(String name, double salary) {
-        super(name, salary);
+class Standard extends Plan {
+    Standard(String name, LocalDate date) {
+        super(name, date);
     }
 
-    double calculate() {
-        return 2000;
+    int validity() {
+        return 90;
+    }
+}
+
+class Premium extends Plan {
+    Premium(String name, LocalDate date) {
+        super(name, date);
+    }
+
+    int validity() {
+        return 365;
     }
 }
 
@@ -47,34 +52,30 @@ public class W8_AA {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
-        double total = 0;
 
         for (int i = 0; i < n; i++) {
             String type = sc.next().toUpperCase();
             String name = sc.next();
-            double salary = sc.nextDouble();
-            Employee e;
+            LocalDate date = LocalDate.parse(sc.next());
+            Plan p;
 
             switch (type) {
-                case "FULLTIME":
-                    e = new FullTime(name, salary);
+                case "BASIC":
+                    p = new Basic(name, date);
                     break;
-                case "PARTTIME":
-                    e = new PartTime(name, salary);
+                case "STANDARD":
+                    p = new Standard(name, date);
                     break;
-                case "INTERN":
-                    e = new Intern(name, salary);
+                case "PREMIUM":
+                    p = new Premium(name, date);
                     break;
                 default:
                     continue;
             }
 
-            double bonus = e.calculate();
-            System.out.printf("%s: %.2f%n", name, bonus);
-            total += bonus;
+            System.out.println(p.name + ": " + p.renewalDate());
         }
 
-        System.out.printf("Total Bonus: %.2f%n", total);
         sc.close();
     }
 }

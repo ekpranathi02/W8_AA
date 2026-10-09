@@ -1,46 +1,45 @@
 
 import java.util.Scanner;
 
-abstract class Room {
-    int units;
+abstract class Employee {
+    String name;
+    double salary;
 
-    Room(int units) {
-        this.units = units;
+    Employee(String name, double salary) {
+        this.name = name;
+        this.salary = salary;
     }
 
     abstract double calculate();
 }
 
-class Single extends Room {
-    Single(int units) {
-        super(units);
+class FullTime extends Employee {
+    FullTime(String name, double salary) {
+        super(name, salary);
     }
 
     double calculate() {
-        return units * 8;
+        return salary * 0.10;
     }
 }
 
-class Shared extends Room {
-    int occupants;
-
-    Shared(int units, int occupants) {
-        super(units);
-        this.occupants = occupants;
+class PartTime extends Employee {
+    PartTime(String name, double salary) {
+        super(name, salary);
     }
 
     double calculate() {
-        return (units * 6.0) / occupants;
+        return salary * 0.05;
     }
 }
 
-class AC extends Room {
-    AC(int units) {
-        super(units);
+class Intern extends Employee {
+    Intern(String name, double salary) {
+        super(name, salary);
     }
 
     double calculate() {
-        return units * 10 + 200;
+        return 2000;
     }
 }
 
@@ -52,30 +51,30 @@ public class W8_AA {
 
         for (int i = 0; i < n; i++) {
             String type = sc.next().toUpperCase();
-            int units = sc.nextInt();
-            Room r;
+            String name = sc.next();
+            double salary = sc.nextDouble();
+            Employee e;
 
             switch (type) {
-                case "SINGLE":
-                    r = new Single(units);
+                case "FULLTIME":
+                    e = new FullTime(name, salary);
                     break;
-                case "SHARED":
-                    int occupants = sc.nextInt();
-                    r = new Shared(units, occupants);
+                case "PARTTIME":
+                    e = new PartTime(name, salary);
                     break;
-                case "AC":
-                    r = new AC(units);
+                case "INTERN":
+                    e = new Intern(name, salary);
                     break;
                 default:
                     continue;
             }
 
-            double bill = r.calculate();
-            System.out.printf("%s: %.2f%n", type, bill);
-            total += bill;
+            double bonus = e.calculate();
+            System.out.printf("%s: %.2f%n", name, bonus);
+            total += bonus;
         }
 
-        System.out.printf("Total: %.2f%n", total);
+        System.out.printf("Total Bonus: %.2f%n", total);
         sc.close();
     }
 }
