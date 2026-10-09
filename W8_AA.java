@@ -1,43 +1,43 @@
 
 import java.util.Scanner;
 
-abstract class Customer {
-    double amount;
+abstract class Vehicle {
+    int hours;
 
-    Customer(double amount) {
-        this.amount = amount;
+    Vehicle(int hours) {
+        this.hours = hours;
     }
 
     abstract double calculate();
 }
 
-class Student extends Customer {
-    Student(double amount) {
-        super(amount);
+class Bike extends Vehicle {
+    Bike(int hours) {
+        super(hours);
     }
 
     double calculate() {
-        return amount * 0.90;
+        return hours * 10;
     }
 }
 
-class Staff extends Customer {
-    Staff(double amount) {
-        super(amount);
+class Car extends Vehicle {
+    Car(int hours) {
+        super(hours);
     }
 
     double calculate() {
-        return amount * 0.95;
+        return 30 + (hours - 1) * 20;
     }
 }
 
-class Guest extends Customer {
-    Guest(double amount) {
-        super(amount);
+class Truck extends Vehicle {
+    Truck(int hours) {
+        super(hours);
     }
 
     double calculate() {
-        return amount + 10;
+        return Math.max(hours * 50, 100);
     }
 }
 
@@ -49,26 +49,26 @@ public class W8_AA {
 
         for (int i = 0; i < n; i++) {
             String type = sc.next().toUpperCase();
-            double amount = sc.nextDouble();
-            Customer c;
+            int hours = sc.nextInt();
+            Vehicle v;
 
             switch (type) {
-                case "STUDENT":
-                    c = new Student(amount);
+                case "BIKE":
+                    v = new Bike(hours);
                     break;
-                case "STAFF":
-                    c = new Staff(amount);
+                case "CAR":
+                    v = new Car(hours);
                     break;
-                case "GUEST":
-                    c = new Guest(amount);
+                case "TRUCK":
+                    v = new Truck(hours);
                     break;
                 default:
                     continue;
             }
 
-            double bill = c.calculate();
-            System.out.printf("%s: %.2f%n", type, bill);
-            total += bill;
+            double charge = v.calculate();
+            System.out.printf("%s: %.2f%n", type, charge);
+            total += charge;
         }
 
         System.out.printf("Total: %.2f%n", total);
